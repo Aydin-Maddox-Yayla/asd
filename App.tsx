@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { BotConfig, BotCommand, GenerationResult, BotPersonality } from './types';
+import { BotConfig, BotCommand, GenerationResult, BotPersonality, InteractionStyle } from './types';
 import { generateBotCode } from './services/geminiService';
 
 const PLATFORMS = ['Discord', 'Telegram', 'Slack', 'Twitch'] as const;
@@ -8,11 +8,12 @@ const LANGUAGES = ['JavaScript', 'TypeScript', 'Python'] as const;
 const PERSONALITIES: BotPersonality[] = ['freundlich', 'formell', 'humorvoll', 'sarkastisch', 'minimalistisch'];
 
 const App: React.FC = () => {
+  // Fix: Initialized interactionStyle with correct type value
   const [config, setConfig] = useState<BotConfig>({
     name: 'MeinSuperBot',
     platform: 'Discord',
     personality: 'freundlich',
-    interactionStyle: 'reaktiv (antwortet nur auf Befehle)',
+    interactionStyle: 'reaktiv',
     features: '',
     commands: [],
     language: 'JavaScript'
@@ -167,11 +168,12 @@ const App: React.FC = () => {
                   <label className="block text-xs font-bold text-slate-500 uppercase mb-2 ml-1">Interaktionsstil</label>
                   <select 
                     value={config.interactionStyle}
-                    onChange={e => setConfig({...config, interactionStyle: e.target.value})}
+                    // Fix: Cast target value to InteractionStyle
+                    onChange={e => setConfig({...config, interactionStyle: e.target.value as InteractionStyle})}
                     className="w-full bg-slate-900/80 border border-slate-700 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-indigo-500 transition-all appearance-none cursor-pointer"
                   >
-                    <option value="reaktiv (antwortet nur auf Befehle)">Reaktiv</option>
-                    <option value="proaktiv (begrüßt neue User, sendet gelegentlich Status-Updates)">Proaktiv</option>
+                    <option value="reaktiv">Reaktiv (antwortet nur auf Befehle)</option>
+                    <option value="proaktiv">Proaktiv (begrüßt neue User, sendet gelegentlich Status-Updates)</option>
                   </select>
                 </div>
               </div>
@@ -400,4 +402,39 @@ const App: React.FC = () => {
                       Zu Railway <svg className="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
                     </a>
                   </div>
-                  <div className="bg-slate-900/80 p-5 rounded-2xl border border
+                  <div className="bg-slate-900/80 p-5 rounded-2xl border border-slate-700/50 group hover:border-indigo-500 transition-all cursor-pointer shadow-lg hover:shadow-indigo-500/10">
+                    <div className="flex items-center justify-between mb-3">
+                      <span className="text-sm font-black text-white group-hover:text-indigo-400 transition-colors">Render.com</span>
+                      <span className="bg-pink-500/10 text-pink-500 text-[10px] px-2 py-0.5 rounded-full font-bold">Solide Gratis-Tier</span>
+                    </div>
+                    <p className="text-xs text-slate-500 mb-4 leading-relaxed">Hervorragend für Web-Services und Bots, die eine Datenbank benötigen.</p>
+                    <a href="https://render.com" target="_blank" rel="noopener noreferrer" className="text-xs text-indigo-400 font-bold flex items-center hover:underline">
+                      Zu Render <svg className="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer className="mt-16 py-12 border-t border-slate-800/50 text-center">
+        <div className="max-w-6xl mx-auto px-4">
+           <div className="flex flex-col items-center space-y-4">
+              <div className="text-slate-600 text-sm font-medium">
+                &copy; {new Date().getFullYear()} BotGenius Pro - Powered by Gemini AI
+              </div>
+              <div className="flex space-x-6 text-xs text-slate-500 uppercase tracking-widest font-bold">
+                 <span className="hover:text-indigo-400 transition-colors cursor-pointer">Datenschutz</span>
+                 <span className="hover:text-indigo-400 transition-colors cursor-pointer">Impressum</span>
+                 <span className="hover:text-indigo-400 transition-colors cursor-pointer">AGB</span>
+              </div>
+           </div>
+        </div>
+      </footer>
+    </div>
+  );
+};
+
+export default App;

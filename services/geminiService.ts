@@ -5,13 +5,18 @@ import { BotConfig } from "../types";
 export const generateBotCode = async (config: BotConfig): Promise<{ code: string; readme: string; packageJson: string }> => {
   const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
   
+  // Fix: Enhanced prompt to explicitly translate interactionStyle keywords for the AI
+  const interactionStyleDesc = config.interactionStyle === 'reaktiv' 
+    ? 'reaktiv (antwortet nur auf Befehle)' 
+    : 'proaktiv (grüßt neue User, sendet gelegentlich Status-Updates)';
+
   const prompt = `
     Erstelle den vollständigen, produktionsreifen Quellcode für einen ${config.platform} Bot namens "${config.name}".
     Sprache: ${config.language}
     
     Bot-Konzept:
     - Persönlichkeit: ${config.personality} (Der Bot soll in diesem Stil antworten).
-    - Interaktionsstil: ${config.interactionStyle}
+    - Interaktionsstil: ${interactionStyleDesc}
     
     Haupt-Features & Aufgaben:
     ${config.features}
@@ -49,6 +54,7 @@ export const generateBotCode = async (config: BotConfig): Promise<{ code: string
   });
 
   try {
+    // Fix: Access response.text as a property directly
     const text = response.text;
     if (!text) throw new Error("Empty response from AI");
     return JSON.parse(text);

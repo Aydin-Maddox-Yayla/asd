@@ -7,13 +7,16 @@ export interface BotCommand {
 }
 
 export type BotPersonality = 'freundlich' | 'formell' | 'humorvoll' | 'sarkastisch' | 'minimalistisch';
-export type InteractionStyle = 'reaktiv' (antwortet nur auf Befehle) | 'proaktiv' (grüßt User, sendet News, etc.);
+
+// Fix: Corrected syntax for InteractionStyle union type and moved descriptions to comments
+export type InteractionStyle = 'reaktiv' | 'proaktiv'; // reaktiv (antwortet nur auf Befehle) | proaktiv (grüßt User, sendet News, etc.)
 
 export interface BotConfig {
   name: string;
   platform: 'Discord' | 'Telegram' | 'Slack' | 'Twitch';
   personality: BotPersonality;
-  interactionStyle: string;
+  // Fix: Use the InteractionStyle type instead of plain string
+  interactionStyle: InteractionStyle;
   features: string;
   commands: BotCommand[];
   language: 'JavaScript' | 'TypeScript' | 'Python';
